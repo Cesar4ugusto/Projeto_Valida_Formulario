@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>Validaação de Formnulário</title>
+    <title>Validação de Formnulário</title>
 </head>
 <body>
 
@@ -18,16 +18,14 @@
     
     <script>
 
-        function validateCpfCnpj(value) {
+        function validateCpfCnpj(values) {
 
-            value.trim;
+            values = values.replace(/\./g, '');
+            values = values.replace('-', '');
+            values = values.replace('/', '');
 
-            value = value.replace(/\./g, '');
-            value = value.replace('-', '');
-            value = value.replace('/', '');
-
-            if (value.length == 11) {
-                var cpf = value;
+            if (values.length == 11) {
+                var cpf = values;
                 
                 var v1 = 0;
                 var v2 = 0;
@@ -73,8 +71,8 @@
                     return true; 
                 }
 
-            } else if (value.length == 14) {
-                var cnpj = value;
+            } else if (values.length == 14) {
+                var cnpj = values;
                 
                 var v1 = 0;
                 var v2 = 0;
@@ -134,13 +132,12 @@
             } else {
                 return false;
             }
-
         }
 
-        function validateEmail(value) {
+        function validateEmail(values) {
 
-            usuario = value.substring(0, value.indexOf("@"));
-            dominio = value.substring(value.indexOf("@") + 1, value.length);
+            usuario = values.substring(0, values.indexOf("@"));
+            dominio = values.substring(values.indexOf("@") + 1, values.length);
 
             if ((usuario.search("@") == -1) &&
                 (dominio.search("@") == -1) &&
@@ -153,41 +150,42 @@
             } else {
                 return false;
             }
-
         }
 
-        function validateTelefone(value) {
-            
-            value.trim;
+        function validateTelefone(values) {
 
-            value = value.replace(/\./g, '');
-            value = value.replace('-', '');
-            value = value.replace('(', ''); 
-            value = value.replace(')', '');
+            values = values.replace(/\./g, '');
+            values = values.replace('-', '');
+            values = values.replace('(', ''); 
+            values = values.replace(')', '');
+            values = values.replace(/\s+/g, '')
 
-            if (value.length == 10 || value.length == 11) {
+            if (values.length == 10 || values.length == 11) {
                 return true;
             } else {
                 return false;                
             }
+        }
 
+        function errorForm(values) {
+            document.getElementById(values).style.borderColor = "red";
         }
         
         function validate() {
 
             if (document.querySelector('#cpfCnpj').value == '') {
-                alert('Para continuar, preencha todos os campos!');
+                errorForm('cpfCnpj')
                 return false;                
             }
 
             if (document.querySelector('#email').value == '') {
-                alert('Para continuar, preencha todos os campos!');
-                return false;                
+                errorForm('email')
+                return false;                   
             }
 
             if (document.querySelector('#telefone').value == '') {
-                alert('Para continuar, preencha todos os campos!');
-                return false;                
+                errorForm('telefone')
+                return false;                   
             }
 
             var cpfCnpj = document.getElementById('cpfCnpj').values;
@@ -195,13 +193,13 @@
             var telefone = document.getElementById('telefone').values;
 
             if (!validateCpfCnpj(cpfCnpj)) {
-                alert('CPF/CNPJ inválido!');
+                errorForm('telefone')
                 return false;
             } else if (!validateEmail(email)) {
-                alert('Email inválido!');
+                errorForm('telefone')
                 return false;
             } else if (!validateTelefone(telefone)) {
-                alert('Telefone inválido!');
+                errorForm('telefone')
                 return false;
             } else {
                 return true;
