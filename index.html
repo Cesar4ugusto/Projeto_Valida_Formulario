@@ -5,14 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>Validação de Formnulário</title>
+    <title>Validação de Formulário</title>
 </head>
 <body>
 
     <form method="POST" novalidate onsubmit="return validate()">
-        <input type="text" name="cpfCnpj" id="cpfCnpj" placeholder="CPF/CNPJ">
-        <input type="text" name="email" id="email" placeholder="EMAIL">
-        <input type="text" name="telefone" id="telefone" placeholder="TELEFONE">
+        <h4>Validação de Formulário</h4>
+        <input type="text" onclick="return notErrorForm(this.id)" name="cpfCnpj" id="cpfCnpj" placeholder="CPF/CNPJ">
+        <input type="text" onclick="return notErrorForm(this.id)" name="email" id="email" placeholder="EMAIL">
+        <input type="text" onclick="return notErrorForm(this.id)" name="telefone" id="telefone" placeholder="TELEFONE">
         <input type="submit" name="enviar" value="Enviar">
     </form>
     
@@ -132,6 +133,7 @@
             } else {
                 return false;
             }
+
         }
 
         function validateEmail(values) {
@@ -150,6 +152,7 @@
             } else {
                 return false;
             }
+
         }
 
         function validateTelefone(values) {
@@ -165,26 +168,47 @@
             } else {
                 return false;                
             }
+
         }
 
-        function errorForm(values) {
-            document.getElementById(values).style.borderColor = "red";
+        function errorForm(values, message) {
+
+            if (values == 'cpfCnpj' && message == undefined) {
+                alert('Campo CPF/CNPJ incorreto!');
+                document.getElementById(values).style.borderColor = "red";
+            } else if (values == 'cpfCnpj' && message != undefined) {
+                alert('Campo CPF/CNPJ '+ message +'!');
+                document.getElementById(values).style.borderColor = "red";
+            } else if (values != 'cpfCnpj' && message == undefined) {
+                alert('Campo '+ values.toUpperCase() +' incorreto!');cpfCnpj
+                document.getElementById(values).style.borderColor = "red";
+            } else {
+                alert('Campo '+ values.toUpperCase() +' '+ message +'!');
+                document.getElementById(values).style.borderColor = "red";
+            }
+
+        }
+
+        function notErrorForm(id) {
+
+            document.getElementById(id).style.borderColor = "#5454544d";
+
         }
         
         function validate() {
 
             if (document.querySelector('#cpfCnpj').value == '') {
-                errorForm('cpfCnpj')
+                errorForm('cpfCnpj', 'vazio');
                 return false;                
             }
 
             if (document.querySelector('#email').value == '') {
-                errorForm('email')
+                errorForm('email', 'vazio');
                 return false;                   
             }
 
             if (document.querySelector('#telefone').value == '') {
-                errorForm('telefone')
+                errorForm('telefone', 'vazio');
                 return false;                   
             }
 
@@ -193,10 +217,10 @@
             var telefone = document.getElementById('telefone').values;
 
             if (!validateCpfCnpj(cpfCnpj)) {
-                errorForm('telefone')
+                errorForm('cpfCnpj')
                 return false;
             } else if (!validateEmail(email)) {
-                errorForm('telefone')
+                errorForm('email')
                 return false;
             } else if (!validateTelefone(telefone)) {
                 errorForm('telefone')
